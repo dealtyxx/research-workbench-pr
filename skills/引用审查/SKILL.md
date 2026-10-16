@@ -1,8 +1,8 @@
 ---
 name: 引用审查
-version: 2.0.0
-description: Citation verification with mandatory user sign-off. Outputs problem list, never auto-corrects.
-description_zh: 引用文献审查：六维度检查，所有结果仅供用户参考，绝不自动修改。每条发现标注需用户决策。
+version: 2.1.0
+description: Citation verification with mandatory user sign-off; format checks require a confirmed target journal. Outputs problem list, never auto-corrects.
+description_zh: 引用文献审查：六维度检查，格式维度需先确认目标期刊。所有结果仅供用户参考，绝不自动修改。每条发现标注需用户决策。
 user-invocable: false
 argument-hint: 上传完成稿件进行引用核查
 ---
@@ -17,6 +17,7 @@ argument-hint: 上传完成稿件进行引用核查
 | AI 验证有局限 | 联网搜索可能不可达（paywall/403），标记为"无法在线验证"而非"不存在" |
 | 用户最终负责 | 报告顶部明确声明"本审查结果仅供参考，引用真实性由作者本人负责" |
 | 不自动增删引用 | 不添加新引用、不删除现有引用，只"建议"用户考虑增删 |
+| 期刊未确认不判格式 | 格式合规维度依赖已确认的目标期刊；未确认即声明跳过并请求用户定刊 |
 
 ## 声明块（每次输出顶部必须包含）
 
@@ -43,11 +44,16 @@ argument-hint: 上传完成稿件进行引用核查
 
 ### 维度 2: 格式合规
 
-按目标期刊格式体系检查（从 journal_profile 读取）：
-- ACM Reference Format（TOIS 用）
+**前置**：从进度文件读取 `target_journal` 与 `journal_profile`。若
+`target_journal_status != confirmed`，本维度输出"目标期刊未确认，格式合规暂不判定"，
+并按「科研写作」第五节的选刊流程向用户提一个问询——不猜格式体系。
+
+按目标期刊格式体系检查：
+- ACM Reference Format（ACM 期刊/会议常用）
 - GB/T 7714（中文期刊）
 - IEEE（CS 会议期刊）
 - APA 7th（社会科学）
+- 具体以期刊"Instructions for Authors"检索结果为准，附来源与检索日期
 
 ### 维度 3: 交叉完整性
 
