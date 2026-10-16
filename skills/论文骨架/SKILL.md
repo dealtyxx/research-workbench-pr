@@ -29,7 +29,9 @@ argument-hint: 输入选题方向和目标期刊（或说明"尚无目标期刊"
 1. 列出当前 Agent 实际可见的技能/工具清单（不是"我记得有"，而是本轮上下文里可枚举的项）。
 2. 判定是否存在**深度研究能力**，标准为：能多轮检索 + 跨来源交叉验证 + 输出带来源引用清单的
    综合报告（如 `deep-research` 类技能、专门的检索/综述子代理编排）。
-   - 只有单次 `WebSearch`/`WebFetch` **不算**：覆盖与交叉验证强度不足以支撑选题判断。
+   - 单次 `WebSearch`/`WebFetch` **不算**；**自己编排多轮 WebSearch 也不算**——
+     多轮普通搜索的覆盖与交叉验证强度仍不如网页端 LLM 的 deep research（不会因轮数增加
+     而升级为深研能力），一律按"无深研能力"处理。
 3. 探针结论写入进度文件 `stages.research.deep_research_mode`，取值：
    `native`（有） / `absent`（无）。
 
@@ -44,7 +46,8 @@ argument-hint: 输入选题方向和目标期刊（或说明"尚无目标期刊"
 ⛔ Stage 1 无法在本机/本 Agent 继续：未检测到深度研究工具
 
 原因：选题定位与竞争格局需要多轮检索 + 交叉验证 + 可溯源引用，
-      当前 Agent 只具备单次网页搜索或无检索能力，产出会看起来完整、实际不可靠。
+      当前 Agent 无 deep research 工具（单次或多轮普通网页搜索都不能替代它），
+      在这里继续下去只会产出"看起来很完整、实际不可靠"的笔记。
 
 请外部平台完成一次 deep research（ChatGPT Deep Research / Gemini Deep Research /
 Perplexity / 本机的其他带深研能力的 Agent），把结果原文贴回，或保存为
@@ -68,9 +71,11 @@ Perplexity / 本机的其他带深研能力的 Agent），把结果原文贴回�
 找不到就写"未检索到"，不要给出无法核实的引用；不要编造 DOI、页码、论文标题。
 ```
 
-- **唯一例外**：用户显式指令要求"就用 WebSearch 继续"时，可以降级执行，但必须在
-  `research-notes.md` 顶部写 `⚠️ 降级模式：单次网页搜索，无交叉验证，覆盖面未知`，且
-  `deep_research_mode = degraded-by-user-request`。Agent 不得自行选择降级。
+- **唯一例外**：用户显式指令要求"就用 WebSearch（哪怕多轮）继续"时，可以降级执行，但必须在
+  `research-notes.md` 顶部写 `⚠️ 降级模式：普通网页搜索，非 deep research，覆盖面与交叉验证
+  强度不足，风险由作者承担`，且 `deep_research_mode = degraded-by-user-request`。
+  Agent **不得**自行选择降级；多轮普通搜索的结果也不得冒充深研产物通过 G1——G1 仍要求每条
+  gap 有可核实的来源支撑。
 
 ### 执行步骤（`native` 或用户显式降级后）
 

@@ -33,7 +33,7 @@ direction intake → deep research (with a capability probe) → gated experimen
 | Change | Why |
 |--------|-----|
 | Stage 0 mandatory intake (writing direction + existing research line + materials + target journal) | Without the direction confirmed, every downstream stage guesses |
-| Deep-research capability probe with **hard stop** |选题判断需要多轮检索+交叉验证；单次网页搜索不够，假装做过更糟 |
+| Deep-research capability probe with **hard stop** |选题判断需要多轮检索+交叉验证；单次或多轮普通网页搜索都不够，假装做过更糟 |
 | Stage 1→2 gate `G1/G2/G3` (confirmed gap · concrete next step · direction compared) | Experiment plans built on an unconfirmed gap look complete but are misdirected |
 | New skill `反防御写作` (claim-forward) applied to outline + polish | Over-defensive writing turns papers into self-audit reports; claim strength is still capped by evidence |
 | Manuscript intake asks for target journal first; if none, web-search a shortlist of verifiable fields | Reviewer calibration and format checks are meaningless without a venue |

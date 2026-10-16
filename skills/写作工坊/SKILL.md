@@ -91,13 +91,15 @@ Stage 6: 审稿⇄修改循环 (review-loop) — 子代理隔离脱盲评审 →
 调用「论文骨架」Stage 1 规程。要点：
 
 - **第 0 步能力探针**：枚举当前 Agent 实际可见的技能/工具清单，判断是否存在深度研究能力
-  （多轮检索 + 交叉验证 + 带来源的综合报告）。只有单次 WebSearch/WebFetch **不算**。
+  （多轮检索 + 交叉验证 + 带来源的综合报告）。单次 **或自己编排的多轮** WebSearch/WebFetch
+  都**不算**——多轮普通搜索不如网页端 LLM 的 deep research，不会因轮数变多而升级。
 - **无该能力 → 一律硬中断**：不自主降级、不用模型记忆凑研究笔记。向用户输出「论文骨架」
   中的固定中断块 + 可直接复制的**交接 prompt**，请其在带 deep research 的平台
   （ChatGPT Deep Research / Gemini Deep Research / Perplexity / 其他本机 Agent）跑完后
   把结果贴回或存为 `deep-research-handoff.md`。拿到该文件之前不进入 Stage 2。
-- 唯一例外：用户显式说"就用普通搜索继续"，此时以 `degraded-by-user-request` 记录并在产出
-  顶部标注局限，由用户承担覆盖面风险。
+- 唯一例外：用户显式说"就用普通搜索（哪怕多轮）继续"，此时以 `degraded-by-user-request`
+  记录、在产出顶部标注"非 deep research、风险由作者承担"，且 G1 门禁不因降级而放松——
+  每条 gap 仍需可核实来源。Agent 不得自行选择降级。
 - 产出 `research-notes.md`：期刊画像（或"待定刊"）、选题边界、已确认研究空白、竞争格局、
   **与现有研究方向对比表**、创新点候选、下一步动作、风险评估。
 
